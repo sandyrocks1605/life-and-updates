@@ -20,20 +20,48 @@
     <style>
 
         /* =====================================================
-           LIFE & UPDATES HOMEPAGE LOGO
+           HERO — TEXT LEFT / LOGO RIGHT
         ===================================================== */
 
-        .homepage-logo-wrapper {
-            width: 100%;
+        .hero-content {
+            max-width: 1250px;
+
+            margin: 0 auto;
+
             display: flex;
-            justify-content: center;
-            margin-bottom: 35px;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 60px;
         }
 
-        .homepage-logo {
+
+        .hero-text {
+            flex: 1;
+
+            min-width: 0;
+        }
+
+
+        .hero-logo {
+            flex: 0 0 42%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        .hero-logo img {
             display: block;
 
-            width: min(520px, 92%);
+            width: 100%;
+
+            max-width: 520px;
 
             height: auto;
 
@@ -48,20 +76,87 @@
                 box-shadow 0.25s ease;
         }
 
-        .homepage-logo:hover {
+
+        .hero-logo img:hover {
+
             transform:
                 translateY(-5px);
 
             box-shadow:
                 0 25px 55px
-                rgba(0, 0, 0, 0.3);
+                rgba(0, 0, 0, 0.30);
+
         }
+
+
+        /* =====================================================
+           TABLETS
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .hero-content {
+
+                gap: 35px;
+
+            }
+
+
+            .hero-logo {
+
+                flex-basis: 40%;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
 
         @media (max-width: 650px) {
 
-            .homepage-logo {
-                width: 94%;
-                border-radius: 14px;
+            .hero-content {
+
+                flex-direction: column;
+
+                text-align: center;
+
+                gap: 35px;
+
+            }
+
+
+            .hero-text {
+
+                width: 100%;
+
+            }
+
+
+            .hero-logo {
+
+                width: 100%;
+
+                flex: none;
+
+                order: 2;
+
+            }
+
+
+            .hero-logo img {
+
+                width: 90%;
+
+            }
+
+
+            .hero-text .actions {
+
+                justify-content: center;
+
             }
 
         }
@@ -117,6 +212,7 @@
     <button
         class="menu"
         aria-label="Open menu"
+        type="button"
     >
         ☰
     </button>
@@ -132,83 +228,102 @@
 <header class="hero">
 
 
-    <!-- =====================================================
-         LIFE & UPDATES LOGO
-    ====================================================== -->
+    <div class="hero-content">
 
-    <div class="homepage-logo-wrapper">
 
-        <img
-            class="homepage-logo"
-            src="life-and-updates-logo.png"
-            alt="Life And Updates — Study With Ease"
-        >
+        <!-- =================================================
+             LEFT SIDE — TEXT
+        ================================================== -->
+
+        <div class="hero-text">
+
+
+            <span class="btn dark">
+
+                YOUR SCHOOL NOTES HUB
+
+            </span>
+
+
+
+            <h1>
+
+                Learn.
+
+                <br>
+
+                <span class="yellow">
+                    Revise.
+                </span>
+
+                <br>
+
+                Stay updated.
+
+            </h1>
+
+
+
+            <p class="lead">
+
+                Welcome to
+                <strong>Life And Updates</strong> —
+                your school notes, revision material,
+                important questions and updates,
+                all in one place.
+
+            </p>
+
+
+
+            <div class="actions">
+
+
+                <a
+                    class="btn primary"
+                    href="#notes"
+                >
+
+                    📚 Explore Notes
+
+                </a>
+
+
+
+                <a
+                    class="btn dark"
+                    href="login.html"
+                >
+
+                    🔐 Login
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT SIDE — LOGO
+        ================================================== -->
+
+        <div class="hero-logo">
+
+
+            <img
+                src="life-and-updates-logo.png"
+                alt="Life And Updates — Study With Ease"
+            >
+
+
+        </div>
+
 
     </div>
-
-
-
-    <span class="btn dark">
-
-        YOUR SCHOOL NOTES HUB
-
-    </span>
-
-
-
-    <h1>
-
-        Learn.
-
-        <br>
-
-        <span class="yellow">
-            Revise.
-        </span>
-
-        <br>
-
-        Stay updated.
-
-    </h1>
-
-
-
-    <p class="lead">
-
-        Welcome to
-        <strong>Life And Updates</strong> —
-        your school notes, revision material,
-        important questions and updates,
-        all in one place.
-
-    </p>
-
-
-
-    <div class="actions">
-
-        <a
-            class="btn primary"
-            href="#notes"
-        >
-
-            📚 Explore Notes
-
-        </a>
-
-
-        <a
-            class="btn dark"
-            href="login.html"
-        >
-
-            🔐 Login
-
-        </a>
-
-    </div>
-
 
 </header>
 
@@ -226,8 +341,11 @@
 
     <div class="section-head">
 
+
         <h2>
+
             📚 Notes
+
         </h2>
 
 
@@ -238,17 +356,22 @@
 
         </p>
 
+
     </div>
 
 
 
-    <!-- SUBJECTS -->
+    <!-- =====================================================
+         SUBJECT BUTTONS
+    ====================================================== -->
 
     <div id="subjectGrid"></div>
 
 
 
-    <!-- SUBJECT NOTES -->
+    <!-- =====================================================
+         SUBJECT NOTES
+    ====================================================== -->
 
     <div
         id="notesArea"
@@ -257,6 +380,7 @@
 
 
         <div class="actions">
+
 
             <button
                 id="backToSubjects"
@@ -267,6 +391,7 @@
                 ← All Subjects
 
             </button>
+
 
         </div>
 
@@ -294,10 +419,13 @@
             class="note-list"
         >
 
+            <!-- Notes are loaded by app.js -->
+
         </div>
 
 
     </div>
+
 
 </main>
 
@@ -315,8 +443,11 @@
 
     <div class="section-head">
 
+
         <h2>
+
             🔔 Latest Updates
+
         </h2>
 
 
@@ -326,14 +457,18 @@
 
         </p>
 
+
     </div>
 
 
 
     <div class="card">
 
+
         <h3>
+
             Welcome to Life And Updates!
+
         </h3>
 
 
@@ -344,6 +479,7 @@
             will appear here.
 
         </p>
+
 
     </div>
 
@@ -364,8 +500,11 @@
 
     <div class="section-head">
 
+
         <h2>
+
             👥 Our Team
+
         </h2>
 
 
@@ -376,6 +515,7 @@
 
         </p>
 
+
     </div>
 
 
@@ -383,15 +523,22 @@
     <div class="team-grid">
 
 
+        <!-- NOTES TEAM -->
+
         <div class="card team">
 
+
             <div class="avatar">
+
                 📚
+
             </div>
 
 
             <h3>
+
                 Notes Team
+
             </h3>
 
 
@@ -402,19 +549,27 @@
 
             </p>
 
+
         </div>
 
 
 
+        <!-- WEBSITE TEAM -->
+
         <div class="card team">
 
+
             <div class="avatar">
+
                 💻
+
             </div>
 
 
             <h3>
+
                 Website Team
+
             </h3>
 
 
@@ -425,19 +580,27 @@
 
             </p>
 
+
         </div>
 
 
 
+        <!-- UPDATES TEAM -->
+
         <div class="card team">
 
+
             <div class="avatar">
+
                 🔔
+
             </div>
 
 
             <h3>
+
                 Updates Team
+
             </h3>
 
 
@@ -448,10 +611,12 @@
 
             </p>
 
+
         </div>
 
 
     </div>
+
 
 </section>
 
@@ -463,13 +628,19 @@
 
 <footer>
 
+
     <strong>
+
         Life And Updates
+
     </strong>
+
 
     <br><br>
 
+
     Study with ease.
+
 
 </footer>
 
