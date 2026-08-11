@@ -81,7 +81,7 @@
 
 
 <!-- =========================================================
-     MAIN
+     MAIN CONTENT
 ========================================================= -->
 
 <main class="container">
@@ -101,8 +101,8 @@
         <p class="muted">
 
             Choose the subject carefully.
-            The note will automatically appear
-            under that subject on the website.
+            Your note will automatically appear
+            under that subject.
 
         </p>
 
@@ -113,6 +113,8 @@
         <form id="uploadForm">
 
 
+            <!-- NOTE TITLE -->
+
             <label for="title">
                 Note Title
             </label>
@@ -120,10 +122,13 @@
             <input
                 id="title"
                 type="text"
-                placeholder="e.g. Electricity — Class Notes"
+                placeholder="Example: Electricity — Class Notes"
                 required
             >
 
+
+
+            <!-- SUBJECT -->
 
             <label for="subject">
                 Subject
@@ -138,48 +143,61 @@
                     Select a subject
                 </option>
 
-                <option value="Mathematics">
-                    ➗ Mathematics
+
+                <option value="Math">
+                    ➗ Math
                 </option>
 
-                <option value="Science">
-                    🔬 Science
-                </option>
-
-                <option value="Social Science">
-                    🌍 Social Science
-                </option>
 
                 <option value="English">
                     📖 English
                 </option>
 
+
+                <option value="Biology">
+                    🧬 Biology
+                </option>
+
+
+                <option value="Chemistry">
+                    🧪 Chemistry
+                </option>
+
+
+                <option value="Physics">
+                    ⚛️ Physics
+                </option>
+
+
+                <option value="Social Science">
+                    🌍 Social Science
+                </option>
+
+
                 <option value="Hindi">
                     🇮🇳 Hindi
                 </option>
 
-                <option value="Marathi">
-                    🪷 Marathi
-                </option>
 
                 <option value="C.Marathi">
                     📘 C.Marathi
                 </option>
 
+
+                <option value="Marathi">
+                    🪷 Marathi
+                </option>
+
+
                 <option value="Sanskrit">
                     🕉️ Sanskrit
                 </option>
 
-                <option value="Computer">
-                    💻 Computer
-                </option>
-
-                <option value="Other">
-                    ⭐ Other
-                </option>
-
             </select>
 
+
+
+            <!-- CHAPTER -->
 
             <label for="chapter">
                 Chapter / Topic
@@ -188,9 +206,12 @@
             <input
                 id="chapter"
                 type="text"
-                placeholder="e.g. Chapter 12 — Electricity"
+                placeholder="Example: Chapter 12 — Electricity"
             >
 
+
+
+            <!-- DESCRIPTION -->
 
             <label for="description">
                 Description
@@ -201,6 +222,9 @@
                 placeholder="Briefly describe this note..."
             ></textarea>
 
+
+
+            <!-- IMPORTANT -->
 
             <label>
 
@@ -214,6 +238,9 @@
             </label>
 
 
+
+            <!-- FILE -->
+
             <label for="file">
                 Note File
             </label>
@@ -225,10 +252,17 @@
                 required
             >
 
+
             <p class="muted">
-                Maximum file size: 15 MB
+
+                Maximum file size:
+                <strong>15 MB</strong>
+
             </p>
 
+
+
+            <!-- UPLOAD -->
 
             <div class="actions">
 
@@ -236,10 +270,13 @@
                     class="btn primary"
                     type="submit"
                 >
+
                     ⬆️ Upload Note
+
                 </button>
 
             </div>
+
 
         </form>
 
@@ -254,21 +291,23 @@
     <section>
 
         <h2>
-            🗑️ Manage Notes
+            🗂️ Manage Notes
         </h2>
 
 
         <p class="muted">
 
-            You can view and permanently delete
-            notes from here.
+            All uploaded notes are shown here.
+            You can permanently delete any note.
 
         </p>
+
 
 
         <div class="table-wrap">
 
             <table class="table">
+
 
                 <thead>
 
@@ -299,6 +338,7 @@
                 </thead>
 
 
+
                 <tbody id="adminNotes">
 
                     <tr>
@@ -312,6 +352,7 @@
                     </tr>
 
                 </tbody>
+
 
             </table>
 
@@ -333,7 +374,12 @@
 ></script>
 
 
+<!-- SUPABASE CONFIG -->
+
 <script src="config.js"></script>
+
+
+<!-- WEBSITE JAVASCRIPT -->
 
 <script src="app.js"></script>
 
