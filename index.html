@@ -17,6 +17,57 @@
         href="styles.css"
     >
 
+    <style>
+
+        /* =====================================================
+           LIFE & UPDATES HOMEPAGE LOGO
+        ===================================================== */
+
+        .homepage-logo-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 35px;
+        }
+
+        .homepage-logo {
+            display: block;
+
+            width: min(520px, 92%);
+
+            height: auto;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 18px 45px
+                rgba(0, 0, 0, 0.25);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .homepage-logo:hover {
+            transform:
+                translateY(-5px);
+
+            box-shadow:
+                0 25px 55px
+                rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 650px) {
+
+            .homepage-logo {
+                width: 94%;
+                border-radius: 14px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 
@@ -80,9 +131,29 @@
 
 <header class="hero">
 
+
+    <!-- =====================================================
+         LIFE & UPDATES LOGO
+    ====================================================== -->
+
+    <div class="homepage-logo-wrapper">
+
+        <img
+            class="homepage-logo"
+            src="life-and-updates-logo.png"
+            alt="Life And Updates — Study With Ease"
+        >
+
+    </div>
+
+
+
     <span class="btn dark">
+
         YOUR SCHOOL NOTES HUB
+
     </span>
+
 
 
     <h1>
@@ -102,6 +173,7 @@
     </h1>
 
 
+
     <p class="lead">
 
         Welcome to
@@ -113,13 +185,16 @@
     </p>
 
 
+
     <div class="actions">
 
         <a
             class="btn primary"
             href="#notes"
         >
+
             📚 Explore Notes
+
         </a>
 
 
@@ -127,10 +202,13 @@
             class="btn dark"
             href="login.html"
         >
+
             🔐 Login
+
         </a>
 
     </div>
+
 
 </header>
 
@@ -145,11 +223,13 @@
     id="notes"
 >
 
+
     <div class="section-head">
 
         <h2>
             📚 Notes
         </h2>
+
 
         <p class="muted">
 
@@ -162,41 +242,13 @@
 
 
 
-    <!-- =====================================================
-         SUBJECT BUTTONS
-    ====================================================== -->
+    <!-- SUBJECTS -->
 
-    <div
-        id="subjectGrid"
-    >
-
-        <!--
-
-        The subject buttons are created
-        automatically by app.js.
-
-        Subjects:
-
-        Math
-        English
-        Biology
-        Chemistry
-        Physics
-        Social Science
-        Hindi
-        C.Marathi
-        Marathi
-        Sanskrit
-
-        -->
-
-    </div>
+    <div id="subjectGrid"></div>
 
 
 
-    <!-- =====================================================
-         SUBJECT NOTES
-    ====================================================== -->
+    <!-- SUBJECT NOTES -->
 
     <div
         id="notesArea"
@@ -242,8 +294,6 @@
             class="note-list"
         >
 
-            <!-- Notes will appear here -->
-
         </div>
 
 
@@ -262,17 +312,22 @@
     id="updates"
 >
 
+
     <div class="section-head">
 
         <h2>
             🔔 Latest Updates
         </h2>
 
+
         <p class="muted">
+
             Important school information.
+
         </p>
 
     </div>
+
 
 
     <div class="card">
@@ -280,6 +335,7 @@
         <h3>
             Welcome to Life And Updates!
         </h3>
+
 
         <p>
 
@@ -290,6 +346,7 @@
         </p>
 
     </div>
+
 
 </section>
 
@@ -304,11 +361,13 @@
     id="team"
 >
 
+
     <div class="section-head">
 
         <h2>
             👥 Our Team
         </h2>
+
 
         <p class="muted">
 
@@ -330,13 +389,17 @@
                 📚
             </div>
 
+
             <h3>
                 Notes Team
             </h3>
 
+
             <p>
+
                 Organising class notes
                 and study material.
+
             </p>
 
         </div>
@@ -349,13 +412,17 @@
                 💻
             </div>
 
+
             <h3>
                 Website Team
             </h3>
 
+
             <p>
+
                 Designing and developing
                 Life And Updates.
+
             </p>
 
         </div>
@@ -368,13 +435,17 @@
                 🔔
             </div>
 
+
             <h3>
                 Updates Team
             </h3>
 
+
             <p>
+
                 Keeping students informed
                 about important updates.
+
             </p>
 
         </div>
@@ -398,7 +469,7 @@
 
     <br><br>
 
-    School notes made simple.
+    Study with ease.
 
 </footer>
 
@@ -412,7 +483,9 @@
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 ></script>
 
+
 <script src="config.js"></script>
+
 
 <script src="app.js"></script>
 
