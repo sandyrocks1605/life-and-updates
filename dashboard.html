@@ -1,2 +1,343 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Editor Dashboard — Life And Updates</title><link rel="stylesheet" href="styles.css"></head><body id="dashboard"><nav><div class="brand"><div class="logo">L</div>Life And Updates</div><div class="navlinks"><a href="index.html">View site</a><button id="logout" class="btn ghost">Logout</button></div></nav><div class="adminbar"><span>🔒 <strong>Editor Dashboard</strong></span><span id="editorEmail"></span></div><main class="container"><div class="form-card" style="margin-top:0"><h2>➕ Upload a Note</h2><div id="uploadMsg" class="notice hidden"></div><form id="uploadForm"><label>Note title</label><input id="title" required placeholder="e.g. Electricity — Class Notes"><label>Subject</label><select id="subject" required><option>Mathematics</option><option>Science</option><option>Social Science</option><option>English</option><option>Hindi</option><option>Marathi</option><option>C.Marathi</option><option>Sanskrit</option><option>Computer</option><option>Other</option></select><label>Chapter / topic</label><input id="chapter" placeholder="e.g. Chapter 12"><label>Description</label><textarea id="description" placeholder="Short description"></textarea><label><input id="important" type="checkbox" style="width:auto"> Mark as important</label><label>PDF / document</label><input id="file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" required><p class="status">Maximum file size: 15 MB.</p><button class="btn primary">Upload note</button></form></div>
-<h2>📋 Manage Notes</h2><div class="table-wrap"><table class="table"><thead><tr><th>Title</th><th>Subject</th><th>Chapter</th><th>Date</th><th>Action</th></tr></thead><tbody id="adminNotes"></tbody></table></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Editor Dashboard — Life And Updates</title>
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
+
+</head>
+
+
+<body id="dashboard">
+
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<nav>
+
+    <div class="brand">
+
+        <div class="logo">
+            L
+        </div>
+
+        <span>
+            Life And Updates
+        </span>
+
+    </div>
+
+
+    <div class="navlinks">
+
+        <a href="index.html">
+            View Website
+        </a>
+
+        <button
+            id="logout"
+            class="btn"
+            type="button"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     EDITOR BAR
+========================================================= -->
+
+<div class="adminbar">
+
+    <strong>
+        🔒 Editor Dashboard
+    </strong>
+
+    <span id="editorEmail">
+        Loading...
+    </span>
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <!-- =====================================================
+         UPLOAD NOTE
+    ====================================================== -->
+
+    <div class="form-card">
+
+        <h2>
+            ➕ Upload a New Note
+        </h2>
+
+
+        <p class="muted">
+
+            Choose the subject carefully.
+            The note will automatically appear
+            under that subject on the website.
+
+        </p>
+
+
+        <div id="uploadMsg"></div>
+
+
+        <form id="uploadForm">
+
+
+            <label for="title">
+                Note Title
+            </label>
+
+            <input
+                id="title"
+                type="text"
+                placeholder="e.g. Electricity — Class Notes"
+                required
+            >
+
+
+            <label for="subject">
+                Subject
+            </label>
+
+            <select
+                id="subject"
+                required
+            >
+
+                <option value="">
+                    Select a subject
+                </option>
+
+                <option value="Mathematics">
+                    ➗ Mathematics
+                </option>
+
+                <option value="Science">
+                    🔬 Science
+                </option>
+
+                <option value="Social Science">
+                    🌍 Social Science
+                </option>
+
+                <option value="English">
+                    📖 English
+                </option>
+
+                <option value="Hindi">
+                    🇮🇳 Hindi
+                </option>
+
+                <option value="Marathi">
+                    🪷 Marathi
+                </option>
+
+                <option value="C.Marathi">
+                    📘 C.Marathi
+                </option>
+
+                <option value="Sanskrit">
+                    🕉️ Sanskrit
+                </option>
+
+                <option value="Computer">
+                    💻 Computer
+                </option>
+
+                <option value="Other">
+                    ⭐ Other
+                </option>
+
+            </select>
+
+
+            <label for="chapter">
+                Chapter / Topic
+            </label>
+
+            <input
+                id="chapter"
+                type="text"
+                placeholder="e.g. Chapter 12 — Electricity"
+            >
+
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                placeholder="Briefly describe this note..."
+            ></textarea>
+
+
+            <label>
+
+                <input
+                    id="important"
+                    type="checkbox"
+                >
+
+                ⭐ Mark as Important
+
+            </label>
+
+
+            <label for="file">
+                Note File
+            </label>
+
+            <input
+                id="file"
+                type="file"
+                accept=".pdf,.doc,.docx,.ppt,.pptx"
+                required
+            >
+
+            <p class="muted">
+                Maximum file size: 15 MB
+            </p>
+
+
+            <div class="actions">
+
+                <button
+                    class="btn primary"
+                    type="submit"
+                >
+                    ⬆️ Upload Note
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MANAGE NOTES
+    ====================================================== -->
+
+    <section>
+
+        <h2>
+            🗑️ Manage Notes
+        </h2>
+
+
+        <p class="muted">
+
+            You can view and permanently delete
+            notes from here.
+
+        </p>
+
+
+        <div class="table-wrap">
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Note
+                        </th>
+
+                        <th>
+                            Subject
+                        </th>
+
+                        <th>
+                            Chapter
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="adminNotes">
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            Loading notes...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<script src="config.js"></script>
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>
