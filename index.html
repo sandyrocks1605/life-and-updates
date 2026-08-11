@@ -17,13 +17,16 @@
         href="styles.css"
     >
 
+
     <style>
 
         /* =====================================================
-           HERO — TEXT LEFT / LOGO RIGHT
+           HERO SECTION
+           TEXT LEFT — LOGO RIGHT
         ===================================================== */
 
         .hero-content {
+
             max-width: 1250px;
 
             margin: 0 auto;
@@ -35,17 +38,21 @@
             justify-content: space-between;
 
             gap: 60px;
+
         }
 
 
         .hero-text {
+
             flex: 1;
 
             min-width: 0;
+
         }
 
 
         .hero-logo {
+
             flex: 0 0 42%;
 
             display: flex;
@@ -53,10 +60,12 @@
             align-items: center;
 
             justify-content: center;
+
         }
 
 
         .hero-logo img {
+
             display: block;
 
             width: 100%;
@@ -74,6 +83,7 @@
             transition:
                 transform 0.25s ease,
                 box-shadow 0.25s ease;
+
         }
 
 
@@ -89,8 +99,39 @@
         }
 
 
+
         /* =====================================================
-           TABLETS
+           TECH TEAM PHOTO
+        ===================================================== */
+
+        .team-photo {
+
+            width: 110px;
+
+            height: 110px;
+
+            margin:
+                0 auto 15px;
+
+            display: block;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border:
+                3px solid #111;
+
+            box-shadow:
+                0 8px 20px
+                rgba(0, 0, 0, 0.15);
+
+        }
+
+
+
+        /* =====================================================
+           TABLET
         ===================================================== */
 
         @media (max-width: 900px) {
@@ -109,6 +150,7 @@
             }
 
         }
+
 
 
         /* =====================================================
@@ -166,7 +208,9 @@
 </head>
 
 
+
 <body>
+
 
 
 <!-- =========================================================
@@ -175,38 +219,61 @@
 
 <nav>
 
+
     <div class="brand">
 
+
         <div class="logo">
+
             L
+
         </div>
 
+
         <span>
+
             Life And Updates
+
         </span>
 
+
     </div>
+
 
 
     <div class="navlinks">
 
+
         <a href="#notes">
+
             📚 Notes
+
         </a>
+
 
         <a href="#updates">
+
             🔔 Updates
+
         </a>
+
 
         <a href="#team">
+
             👥 Team
+
         </a>
+
 
         <a href="login.html">
+
             🔐 Login
+
         </a>
 
+
     </div>
+
 
 
     <button
@@ -214,8 +281,11 @@
         aria-label="Open menu"
         type="button"
     >
+
         ☰
+
     </button>
+
 
 </nav>
 
@@ -253,7 +323,9 @@
                 <br>
 
                 <span class="yellow">
+
                     Revise.
+
                 </span>
 
                 <br>
@@ -267,9 +339,19 @@
             <p class="lead">
 
                 Welcome to
-                <strong>Life And Updates</strong> —
-                your school notes, revision material,
-                important questions and updates,
+
+                <strong>
+
+                    Life And Updates
+
+                </strong>
+
+                —
+
+                your school notes,
+                revision material,
+                important questions
+                and updates,
                 all in one place.
 
             </p>
@@ -308,7 +390,7 @@
 
 
         <!-- =================================================
-             RIGHT SIDE — LOGO
+             RIGHT SIDE — LIFE AND UPDATES LOGO
         ================================================== -->
 
         <div class="hero-logo">
@@ -324,6 +406,7 @@
 
 
     </div>
+
 
 </header>
 
@@ -362,7 +445,7 @@
 
 
     <!-- =====================================================
-         SUBJECT BUTTONS
+         SUBJECT GRID
     ====================================================== -->
 
     <div id="subjectGrid"></div>
@@ -370,7 +453,7 @@
 
 
     <!-- =====================================================
-         SUBJECT NOTES
+         NOTES AREA
     ====================================================== -->
 
     <div
@@ -474,9 +557,9 @@
 
         <p>
 
-            New notes, announcements and
-            important school information
-            will appear here.
+            New notes, announcements
+            and important school
+            information will appear here.
 
         </p>
 
@@ -523,7 +606,10 @@
     <div class="team-grid">
 
 
-        <!-- NOTES TEAM -->
+
+        <!-- =================================================
+             NOTES TEAM
+        ================================================== -->
 
         <div class="card team">
 
@@ -554,29 +640,44 @@
 
 
 
-        <!-- WEBSITE TEAM -->
+        <!-- =================================================
+             TECH TEAM — SANJEET RANADIVE
+        ================================================== -->
 
         <div class="card team">
 
 
-            <div class="avatar">
-
-                💻
-
-            </div>
+            <img
+                class="team-photo"
+                src="sanjeet-ranadive.jpeg"
+                alt="Sanjeet Ranadive"
+            >
 
 
             <h3>
 
-                Website Team
+                Sanjeet Ranadive
 
             </h3>
 
 
             <p>
 
-                Designing and developing
-                Life And Updates.
+                <strong>
+
+                    Tech Team
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Designing, developing
+                and maintaining the
+                Life And Updates website
+                and its digital features.
 
             </p>
 
@@ -585,7 +686,9 @@
 
 
 
-        <!-- UPDATES TEAM -->
+        <!-- =================================================
+             UPDATES TEAM
+        ================================================== -->
 
         <div class="card team">
 
@@ -636,7 +739,9 @@
     </strong>
 
 
-    <br><br>
+    <br>
+
+    <br>
 
 
     Study with ease.
@@ -659,6 +764,7 @@
 
 
 <script src="app.js"></script>
+
 
 
 </body>
