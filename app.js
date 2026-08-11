@@ -2,9 +2,10 @@
 // LIFE AND UPDATES — app.js
 // ============================================================
 
-// ------------------------------------------------------------
+
+// ============================================================
 // SUPABASE CONNECTION
-// ------------------------------------------------------------
+// ============================================================
 
 const configured =
     typeof window.supabase !== "undefined" &&
@@ -12,6 +13,7 @@ const configured =
     window.SUPABASE_ANON_KEY &&
     !window.SUPABASE_URL.includes("PASTE_") &&
     !window.SUPABASE_ANON_KEY.includes("PASTE_");
+
 
 const sb = configured
     ? window.supabase.createClient(
@@ -28,147 +30,335 @@ const sb = configured
     : null;
 
 
-// ------------------------------------------------------------
-// HELPERS
-// ------------------------------------------------------------
+// ============================================================
+// BASIC HELPERS
+// ============================================================
 
 const $ = selector => document.querySelector(selector);
 
-const escapeHTML = value =>
-    String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-    }[char]));
 
-function showMessage(selector, text, type = "notice") {
+function escapeHTML(value) {
+
+    return String(value ?? "").replace(
+        /[&<>"']/g,
+        character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[character])
+    );
+
+}
+
+
+function showMessage(
+    selector,
+    text,
+    type = "notice"
+) {
+
     const element = $(selector);
 
     if (!element) return;
 
-    element.className = `notice ${type}`;
-    element.textContent = text;
+    element.className =
+        `notice ${type}`;
+
+    element.textContent =
+        text;
+
 }
 
+
 function connectionError() {
-    return "The website cannot connect to Supabase. Please check config.js.";
+
+    return (
+        "Life And Updates cannot connect to Supabase. " +
+        "Please check config.js."
+    );
+
 }
+
+
+// ============================================================
+// SUBJECTS
+// ============================================================
+
+const SUBJECTS = {
+
+    "Math": {
+        icon: "➗",
+        description:
+            "Mathematics, formulas and problem solving"
+    },
+
+    "English": {
+        icon: "📖",
+        description:
+            "Literature, grammar and writing"
+    },
+
+    "Biology": {
+        icon: "🧬",
+        description:
+            "Living organisms and life science"
+    },
+
+    "Chemistry": {
+        icon: "🧪",
+        description:
+            "Matter, reactions and chemistry"
+    },
+
+    "Physics": {
+        icon: "⚛️",
+        description:
+            "Motion, forces, energy and physics"
+    },
+
+    "Social Science": {
+        icon: "🌍",
+        description:
+            "History, geography and civics"
+    },
+
+    "Hindi": {
+        icon: "अ",
+        description:
+            "हिंदी पाठ, व्याकरण और लेखन"
+    },
+
+    "C.Marathi": {
+        icon: "📘",
+        description:
+            "C.Marathi notes and study material"
+    },
+
+    "Marathi": {
+        icon: "🪷",
+        description:
+            "मराठी पाठ, व्याकरण आणि लेखन"
+    },
+
+    "Sanskrit": {
+        icon: "🕉️",
+        description:
+            "संस्कृत पाठ और व्याकरण"
+    }
+
+};
+
+
+// ============================================================
+// AUTHENTICATION
+// ============================================================
 
 
 // ------------------------------------------------------------
-// AUTHENTICATION
+// GET CURRENT SESSION
 // ------------------------------------------------------------
 
 async function getSession() {
 
     if (!sb) return null;
 
-    const { data, error } = await sb.auth.getSession();
+    const {
+        data,
+        error
+    } = await sb.auth.getSession();
+
 
     if (error) {
-        console.error("Session error:", error);
+
+        console.error(
+            "Session error:",
+            error
+        );
+
         return null;
     }
 
+
     return data?.session || null;
+
 }
 
+
+// ------------------------------------------------------------
+// GET USER PROFILE
+// ------------------------------------------------------------
 
 async function getProfile() {
 
-    const session = await getSession();
+    const session =
+        await getSession();
+
 
     if (!session) return null;
 
-    const { data, error } = await sb
+
+    const {
+        data,
+        error
+    } = await sb
         .from("profiles")
         .select("*")
-        .eq("id", session.user.id)
+        .eq(
+            "id",
+            session.user.id
+        )
         .maybeSingle();
 
+
     if (error) {
-        console.error("Profile error:", error);
+
+        console.error(
+            "Profile error:",
+            error
+        );
+
         return null;
     }
 
+
     return data || null;
+
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // LOGIN
-// ------------------------------------------------------------
+// ============================================================
 
 async function login(event) {
 
     event.preventDefault();
 
+
     if (!sb) {
-        showMessage("#msg", connectionError(), "error");
-        return;
-    }
-
-    const email = $("#email").value.trim();
-    const password = $("#password").value;
-
-    showMessage("#msg", "Signing in…");
-
-    const { data, error } =
-        await sb.auth.signInWithPassword({
-            email,
-            password
-        });
-
-    if (error) {
-
-        let message = error.message;
-
-        if (/invalid login credentials/i.test(message)) {
-            message = "Email or password is incorrect.";
-        }
-
-        if (/email not confirmed/i.test(message)) {
-            message =
-                "Please confirm your email first, then try logging in again.";
-        }
-
-        showMessage("#msg", message, "error");
-
-        return;
-    }
-
-    if (data?.session) {
-
-        window.location.href = "dashboard.html";
-
-    } else {
 
         showMessage(
             "#msg",
-            "Login succeeded, but no session was returned. Please try again.",
+            connectionError(),
             "error"
         );
+
+        return;
     }
+
+
+    const email =
+        $("#email")
+            .value
+            .trim();
+
+
+    const password =
+        $("#password")
+            .value;
+
+
+    showMessage(
+        "#msg",
+        "Signing in..."
+    );
+
+
+    const {
+        data,
+        error
+    } =
+        await sb.auth.signInWithPassword({
+
+            email,
+            password
+
+        });
+
+
+    if (error) {
+
+        let message =
+            error.message;
+
+
+        if (
+            /invalid login credentials/i
+                .test(message)
+        ) {
+
+            message =
+                "Email or password is incorrect.";
+
+        }
+
+
+        if (
+            /email not confirmed/i
+                .test(message)
+        ) {
+
+            message =
+                "Please confirm your email first, then try logging in again.";
+
+        }
+
+
+        showMessage(
+            "#msg",
+            message,
+            "error"
+        );
+
+
+        return;
+
+    }
+
+
+    if (data?.session) {
+
+        window.location.href =
+            "dashboard.html";
+
+    }
+
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // CREATE ACCOUNT
-// ------------------------------------------------------------
+// ============================================================
 
 async function signup(event) {
 
     event.preventDefault();
 
+
     if (!sb) {
-        showMessage("#msg", connectionError(), "error");
+
+        showMessage(
+            "#msg",
+            connectionError(),
+            "error"
+        );
+
         return;
     }
 
-    const email = $("#email").value.trim();
-    const password = $("#password").value;
+
+    const email =
+        $("#email")
+            .value
+            .trim();
+
+
+    const password =
+        $("#password")
+            .value;
+
 
     if (password.length < 8) {
 
@@ -181,18 +371,32 @@ async function signup(event) {
         return;
     }
 
-    showMessage("#msg", "Creating your account…");
 
-    const { data, error } =
+    showMessage(
+        "#msg",
+        "Creating your account..."
+    );
+
+
+    const {
+        data,
+        error
+    } =
         await sb.auth.signUp({
+
             email,
+
             password,
 
             options: {
+
                 emailRedirectTo:
                     "https://sandyrocks1605.github.io/life-and-updates/login.html"
+
             }
+
         });
+
 
     if (error) {
 
@@ -205,6 +409,7 @@ async function signup(event) {
         return;
     }
 
+
     if (data?.session) {
 
         showMessage(
@@ -213,341 +418,358 @@ async function signup(event) {
             "success"
         );
 
-    } else {
+    }
+
+    else {
 
         showMessage(
             "#msg",
-            "Account created! Check your email and click the confirmation link before logging in.",
+            "Account created! Check your email and confirm your account before logging in.",
             "success"
         );
+
     }
+
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // LOGOUT
-// ------------------------------------------------------------
+// ============================================================
 
 async function logout() {
 
     if (sb) {
+
         await sb.auth.signOut();
+
     }
 
-    window.location.href = "index.html";
-}
 
+    window.location.href =
+        "index.html";
 
-// ------------------------------------------------------------
-// EDITOR PROTECTION
-// ------------------------------------------------------------
-
-async function protectDashboard() {
-
-    if (!sb) {
-
-        document.body.innerHTML = `
-            <div class="container">
-                <div class="notice error">
-                    Supabase is not connected.
-                </div>
-            </div>
-        `;
-
-        return null;
-    }
-
-    const session = await getSession();
-
-    if (!session) {
-
-        window.location.href = "login.html";
-
-        return null;
-    }
-
-    const profile = await getProfile();
-
-    if (!profile) {
-
-        document.body.innerHTML = `
-            <div class="container">
-                <div class="notice error">
-                    <strong>Your profile was not found.</strong>
-                    <br><br>
-                    Please run the latest Supabase SQL setup.
-                </div>
-
-                <a class="btn dark" href="index.html">
-                    Back to site
-                </a>
-            </div>
-        `;
-
-        return null;
-    }
-
-    if (profile.role !== "editor") {
-
-        document.body.innerHTML = `
-            <div class="container">
-
-                <div class="notice error">
-
-                    <strong>Access denied.</strong>
-
-                    <br><br>
-
-                    This account is a Student account.
-
-                    <br>
-
-                    Only authorised Editors can manage notes.
-
-                </div>
-
-                <a class="btn dark" href="index.html">
-                    Back to site
-                </a>
-
-            </div>
-        `;
-
-        return null;
-    }
-
-    const emailElement = $("#editorEmail");
-
-    if (emailElement) {
-        emailElement.textContent = profile.email || "";
-    }
-
-    return profile;
 }
 
 
 // ============================================================
-// SUBJECT-WISE NOTES SYSTEM
+// SUBJECT PAGE
 // ============================================================
 
 
 // ------------------------------------------------------------
-// SUBJECT LIST
-// ------------------------------------------------------------
-
-const SUBJECTS = {
-
-    Mathematics: {
-        icon: "➗",
-        description: "Numbers, formulas and problem solving"
-    },
-
-    Science: {
-        icon: "🔬",
-        description: "Physics, chemistry and biology"
-    },
-
-    "Social Science": {
-        icon: "🌍",
-        description: "History, geography and civics"
-    },
-
-    English: {
-        icon: "📖",
-        description: "Literature, grammar and writing"
-    },
-
-    Hindi: {
-        icon: "अ",
-        description: "हिंदी पाठ, व्याकरण और लेखन"
-    },
-
-    Marathi: {
-        icon: "अ",
-        description: "मराठी पाठ, व्याकरण आणि लेखन"
-    },
-
-    "C.Marathi": {
-        icon: "📘",
-        description: "Classwork and revision"
-    },
-
-    Sanskrit: {
-        icon: "🪷",
-        description: "संस्कृत पाठ और व्याकरण"
-    },
-
-    Computer: {
-        icon: "💻",
-        description: "Computers, coding and technology"
-    },
-
-    Other: {
-        icon: "⭐",
-        description: "Projects and other material"
-    }
-};
-
-
-// ------------------------------------------------------------
-// SHOW SUBJECTS
+// CREATE SUBJECT BUTTONS
 // ------------------------------------------------------------
 
 function showSubjects() {
 
-    const subjectContainer = $("#subjectGrid");
+    const subjectGrid =
+        $("#subjectGrid");
 
-    const notesContainer = $("#notesArea");
 
-    if (!subjectContainer) return;
+    const notesArea =
+        $("#notesArea");
 
-    subjectContainer.classList.remove("hidden");
 
-    if (notesContainer) {
-        notesContainer.classList.add("hidden");
+    if (!subjectGrid) return;
+
+
+    if (notesArea) {
+
+        notesArea.classList.add(
+            "hidden"
+        );
+
     }
 
-    subjectContainer.innerHTML =
-        Object.entries(SUBJECTS)
-            .map(([subject, info]) => `
 
-                <button
-                    class="card subject-card"
-                    type="button"
-                    data-subject="${escapeHTML(subject)}"
-                    style="text-align:left;cursor:pointer"
-                >
+    subjectGrid.classList.remove(
+        "hidden"
+    );
+
+
+    subjectGrid.innerHTML = "";
+
+
+    Object.entries(
+        SUBJECTS
+    )
+        .forEach(
+            ([subject, info]) => {
+
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                button.type =
+                    "button";
+
+
+                button.className =
+                    "subject-card";
+
+
+                button.dataset.subject =
+                    subject;
+
+
+                button.innerHTML = `
 
                     <div class="icon">
+
                         ${info.icon}
+
                     </div>
 
                     <h3>
+
                         ${escapeHTML(subject)}
+
                     </h3>
 
                     <p>
-                        ${escapeHTML(info.description)}
+
+                        ${escapeHTML(
+                            info.description
+                        )}
+
                     </p>
 
-                </button>
+                `;
 
-            `)
-            .join("");
 
-    document
-        .querySelectorAll("[data-subject]")
-        .forEach(button => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-            button.addEventListener("click", () => {
+                        loadSubjectNotes(
+                            subject
+                        );
 
-                loadSubjectNotes(
-                    button.dataset.subject
+                    }
                 );
 
-            });
 
-        });
+                subjectGrid.appendChild(
+                    button
+                );
+
+            }
+        );
+
 }
 
 
-// ------------------------------------------------------------
-// LOAD NOTES FOR ONE SUBJECT
-// ------------------------------------------------------------
+// ============================================================
+// LOAD NOTES FOR SELECTED SUBJECT
+// ============================================================
 
-async function loadSubjectNotes(subject, search = "") {
+async function loadSubjectNotes(
+    subject,
+    search = ""
+) {
 
-    const subjectContainer = $("#subjectGrid");
+    const subjectGrid =
+        $("#subjectGrid");
 
-    const notesContainer = $("#notesArea");
 
-    const notesList = $("#notesList");
+    const notesArea =
+        $("#notesArea");
 
-    const subjectTitle = $("#selectedSubject");
 
-    const searchBox = $("#subjectSearch");
+    const notesList =
+        $("#notesList");
 
-    if (!notesContainer || !notesList) return;
 
-    if (subjectContainer) {
-        subjectContainer.classList.add("hidden");
+    const subjectTitle =
+        $("#selectedSubject");
+
+
+    const searchBox =
+        $("#subjectSearch");
+
+
+    if (!notesArea ||
+        !notesList) {
+
+        return;
+
     }
 
-    notesContainer.classList.remove("hidden");
+
+    // Hide subjects
+
+    if (subjectGrid) {
+
+        subjectGrid.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    // Show notes
+
+    notesArea.classList.remove(
+        "hidden"
+    );
+
+
+    // Subject title
+
+    const info =
+        SUBJECTS[subject];
+
 
     if (subjectTitle) {
-
-        const info = SUBJECTS[subject];
 
         subjectTitle.textContent =
             `${info?.icon || "📚"} ${subject} Notes`;
 
     }
 
+
+    // Search box
+
     if (searchBox) {
 
-        searchBox.value = search;
+        searchBox.value =
+            search;
 
-        searchBox.dataset.subject = subject;
+        searchBox.dataset.subject =
+            subject;
+
     }
 
-    notesList.innerHTML =
-        `<div class="notice">Loading ${escapeHTML(subject)} notes…</div>`;
+
+    notesList.innerHTML = `
+
+        <div class="notice">
+
+            Loading
+            ${escapeHTML(subject)}
+            notes...
+
+        </div>
+
+    `;
+
 
     if (!sb) {
 
-        notesList.innerHTML =
-            `<div class="notice error">
+        notesList.innerHTML = `
+
+            <div class="notice error">
+
                 ${connectionError()}
-            </div>`;
+
+            </div>
+
+        `;
 
         return;
+
     }
+
+
+    // --------------------------------------------------------
+    // SUPABASE QUERY
+    // --------------------------------------------------------
 
     let query =
         sb
             .from("notes")
             .select("*")
-            .eq("subject", subject)
-            .order("created_at", {
-                ascending: false
-            });
+            .eq(
+                "subject",
+                subject
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    // Search within subject
 
     if (search) {
 
         query =
             query.or(
-                `title.ilike.%${search}%,chapter.ilike.%${search}%,description.ilike.%${search}%`
+
+                `title.ilike.%${search}%,` +
+                `chapter.ilike.%${search}%,` +
+                `description.ilike.%${search}%`
+
             );
+
     }
 
-    const { data, error } = await query;
+
+    const {
+        data,
+        error
+    } =
+        await query;
+
 
     if (error) {
 
         console.error(error);
 
-        notesList.innerHTML =
-            `<div class="notice error">
-                ${escapeHTML(error.message)}
-            </div>`;
-
-        return;
-    }
-
-    if (!data || data.length === 0) {
 
         notesList.innerHTML = `
+
+            <div class="notice error">
+
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    // No notes
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        notesList.innerHTML = `
+
             <div class="notice">
 
                 No notes found for
-                <strong>${escapeHTML(subject)}</strong>.
+
+                <strong>
+                    ${escapeHTML(subject)}
+                </strong>.
 
             </div>
+
         `;
 
         return;
+
     }
+
+
+    // --------------------------------------------------------
+    // DISPLAY NOTES
+    // --------------------------------------------------------
 
     notesList.innerHTML =
         data
@@ -555,9 +777,11 @@ async function loadSubjectNotes(subject, search = "") {
 
                 const date =
                     note.created_at
-                        ? new Date(note.created_at)
-                            .toLocaleDateString()
+                        ? new Date(
+                            note.created_at
+                        ).toLocaleDateString()
                         : "";
+
 
                 return `
 
@@ -567,20 +791,34 @@ async function loadSubjectNotes(subject, search = "") {
 
                             <div class="muted">
 
-                                ${escapeHTML(note.chapter || "General")}
+                                ${escapeHTML(
+                                    note.chapter ||
+                                    "General"
+                                )}
 
-                                ${date ? ` • ${date}` : ""}
+                                ${
+                                    date
+                                        ? ` • ${date}`
+                                        : ""
+                                }
 
                             </div>
 
+
                             <h3>
-                                ${escapeHTML(note.title)}
+
+                                ${escapeHTML(
+                                    note.title
+                                )}
+
                             </h3>
+
 
                             <p>
 
                                 ${escapeHTML(
-                                    note.description || ""
+                                    note.description ||
+                                    ""
                                 )}
 
                                 ${
@@ -593,23 +831,31 @@ async function loadSubjectNotes(subject, search = "") {
 
                         </div>
 
+
                         <div class="note-actions">
 
                             ${
                                 note.file_url
 
                                     ? `
+
                                         <a
                                             class="btn primary"
+                                            href="${escapeHTML(
+                                                note.file_url
+                                            )}"
                                             target="_blank"
                                             rel="noopener"
-                                            href="${escapeHTML(note.file_url)}"
                                         >
+
                                             📄 Open Note
+
                                         </a>
+
                                       `
 
                                     : ""
+
                             }
 
                         </div>
@@ -620,57 +866,224 @@ async function loadSubjectNotes(subject, search = "") {
 
             })
             .join("");
+
 }
 
 
-// ------------------------------------------------------------
-// SEARCH WITHIN SUBJECT
-// ------------------------------------------------------------
+// ============================================================
+// SEARCH INSIDE SUBJECT
+// ============================================================
 
 function searchSubjectNotes() {
 
-    const searchBox = $("#subjectSearch");
+    const searchBox =
+        $("#subjectSearch");
+
 
     if (!searchBox) return;
+
 
     const subject =
         searchBox.dataset.subject;
 
-    const search =
-        searchBox.value.trim();
 
     if (!subject) return;
+
+
+    const search =
+        searchBox
+            .value
+            .trim();
+
 
     loadSubjectNotes(
         subject,
         search
     );
-}
 
-
-// ------------------------------------------------------------
-// BACK TO SUBJECTS
-// ------------------------------------------------------------
-
-function backToSubjects() {
-
-    const notesContainer = $("#notesArea");
-
-    if (notesContainer) {
-        notesContainer.classList.add("hidden");
-    }
-
-    showSubjects();
 }
 
 
 // ============================================================
-// EDITOR NOTE UPLOAD
+// BACK TO SUBJECTS
+// ============================================================
+
+function backToSubjects() {
+
+    const notesArea =
+        $("#notesArea");
+
+
+    if (notesArea) {
+
+        notesArea.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    showSubjects();
+
+}
+
+
+// ============================================================
+// EDITOR DASHBOARD SECURITY
+// ============================================================
+
+async function protectDashboard() {
+
+    if (!sb) {
+
+        document.body.innerHTML = `
+
+            <div class="container">
+
+                <div class="notice error">
+
+                    ${connectionError()}
+
+                </div>
+
+            </div>
+
+        `;
+
+        return null;
+
+    }
+
+
+    const session =
+        await getSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "login.html";
+
+        return null;
+
+    }
+
+
+    const profile =
+        await getProfile();
+
+
+    if (!profile) {
+
+        document.body.innerHTML = `
+
+            <div class="container">
+
+                <div class="notice error">
+
+                    <strong>
+                        Your account profile was not found.
+                    </strong>
+
+                    <br><br>
+
+                    Please run the latest
+                    Supabase SQL setup.
+
+                </div>
+
+
+                <a
+                    class="btn dark"
+                    href="index.html"
+                >
+
+                    Back to site
+
+                </a>
+
+            </div>
+
+        `;
+
+        return null;
+
+    }
+
+
+    // Only Editors
+
+    if (
+        profile.role !==
+        "editor"
+    ) {
+
+        document.body.innerHTML = `
+
+            <div class="container">
+
+                <div class="notice error">
+
+                    <strong>
+                        Access denied.
+                    </strong>
+
+                    <br><br>
+
+                    This account is a
+                    Student account.
+
+                    <br>
+
+                    Only authorised Editors
+                    can manage notes.
+
+                </div>
+
+
+                <a
+                    class="btn dark"
+                    href="index.html"
+                >
+
+                    Back to site
+
+                </a>
+
+            </div>
+
+        `;
+
+        return null;
+
+    }
+
+
+    const editorEmail =
+        $("#editorEmail");
+
+
+    if (editorEmail) {
+
+        editorEmail.textContent =
+            profile.email || "";
+
+    }
+
+
+    return profile;
+
+}
+
+
+// ============================================================
+// UPLOAD NOTE
 // ============================================================
 
 async function uploadNote(event) {
 
     event.preventDefault();
+
 
     if (!sb) {
 
@@ -681,10 +1094,13 @@ async function uploadNote(event) {
         );
 
         return;
+
     }
+
 
     const profile =
         await getProfile();
+
 
     if (
         !profile ||
@@ -698,10 +1114,13 @@ async function uploadNote(event) {
         );
 
         return;
+
     }
+
 
     const file =
         $("#file").files[0];
+
 
     if (!file) {
 
@@ -712,9 +1131,11 @@ async function uploadNote(event) {
         );
 
         return;
+
     }
 
-    // 15 MB maximum
+
+    // Maximum 15 MB
 
     if (
         file.size >
@@ -728,12 +1149,15 @@ async function uploadNote(event) {
         );
 
         return;
+
     }
+
 
     showMessage(
         "#uploadMsg",
-        "Uploading note…"
+        "Uploading note..."
     );
+
 
     const safeName =
         file.name.replace(
@@ -741,7 +1165,8 @@ async function uploadNote(event) {
             "_"
         );
 
-    const path =
+
+    const filePath =
         `${crypto.randomUUID()}-${safeName}`;
 
 
@@ -753,12 +1178,13 @@ async function uploadNote(event) {
         await sb.storage
             .from("notes")
             .upload(
-                path,
+                filePath,
                 file,
                 {
                     upsert: false
                 }
             );
+
 
     if (uploadResult.error) {
 
@@ -769,26 +1195,31 @@ async function uploadNote(event) {
         );
 
         return;
+
     }
 
 
     // --------------------------------------------------------
-    // GET PUBLIC FILE URL
+    // GET PUBLIC URL
     // --------------------------------------------------------
 
     const publicURL =
         sb.storage
             .from("notes")
-            .getPublicUrl(path)
+            .getPublicUrl(
+                filePath
+            )
             .data
             .publicUrl;
 
 
     // --------------------------------------------------------
-    // SAVE NOTE INFORMATION
+    // SAVE NOTE
     // --------------------------------------------------------
 
-    const insertResult =
+    const {
+        error
+    } =
         await sb
             .from("notes")
             .insert({
@@ -820,7 +1251,7 @@ async function uploadNote(event) {
                     publicURL,
 
                 file_path:
-                    path,
+                    filePath,
 
                 created_by:
                     profile.id
@@ -828,28 +1259,28 @@ async function uploadNote(event) {
             });
 
 
-    if (insertResult.error) {
+    if (error) {
 
-        // Delete uploaded file if
-        // database insertion fails.
+        // Remove uploaded file if
+        // database insertion failed.
 
         await sb.storage
             .from("notes")
-            .remove([path]);
+            .remove([
+                filePath
+            ]);
+
 
         showMessage(
             "#uploadMsg",
-            insertResult.error.message,
+            error.message,
             "error"
         );
 
         return;
+
     }
 
-
-    // --------------------------------------------------------
-    // SUCCESS
-    // --------------------------------------------------------
 
     showMessage(
         "#uploadMsg",
@@ -857,14 +1288,17 @@ async function uploadNote(event) {
         "success"
     );
 
+
     $("#uploadForm").reset();
 
+
     loadAdminNotes();
+
 }
 
 
 // ============================================================
-// ADMIN NOTE LIST
+// EDITOR — LIST ALL NOTES
 // ============================================================
 
 async function loadAdminNotes() {
@@ -872,9 +1306,19 @@ async function loadAdminNotes() {
     const table =
         $("#adminNotes");
 
-    if (!table || !sb) return;
 
-    const { data, error } =
+    if (!table ||
+        !sb) {
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
         await sb
             .from("notes")
             .select("*")
@@ -885,40 +1329,90 @@ async function loadAdminNotes() {
                 }
             );
 
+
     if (error) {
 
         table.innerHTML = `
+
             <tr>
+
                 <td colspan="5">
-                    ${escapeHTML(error.message)}
+
+                    ${escapeHTML(
+                        error.message
+                    )}
+
                 </td>
+
             </tr>
+
         `;
 
         return;
+
     }
 
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    No notes have been uploaded yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
     table.innerHTML =
-        (data || [])
+        data
             .map(note => `
 
                 <tr>
 
                     <td>
-                        ${escapeHTML(note.title)}
-                    </td>
 
-                    <td>
-                        ${escapeHTML(note.subject)}
-                    </td>
-
-                    <td>
                         ${escapeHTML(
-                            note.chapter || ""
+                            note.title
                         )}
+
                     </td>
 
+
                     <td>
+
+                        ${escapeHTML(
+                            note.subject
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            note.chapter ||
+                            ""
+                        )}
+
+                    </td>
+
+
+                    <td>
+
                         ${
                             note.created_at
                                 ? new Date(
@@ -926,20 +1420,26 @@ async function loadAdminNotes() {
                                 ).toLocaleDateString()
                                 : ""
                         }
+
                     </td>
+
 
                     <td>
 
                         <button
                             class="btn danger"
+                            type="button"
                             onclick="deleteNote(
                                 '${note.id}',
                                 '${escapeHTML(
-                                    note.file_path || ""
+                                    note.file_path ||
+                                    ""
                                 )}'
                             )"
                         >
+
                             🗑️ Delete
+
                         </button>
 
                     </td>
@@ -948,6 +1448,7 @@ async function loadAdminNotes() {
 
             `)
             .join("");
+
 }
 
 
@@ -962,55 +1463,93 @@ async function deleteNote(
 
     if (
         !confirm(
-            "Are you sure you want to delete this note?"
+            "Are you sure you want to permanently delete this note?"
         )
     ) {
+
         return;
+
     }
+
 
     if (!sb) return;
 
 
-    // Delete database record
+    // --------------------------------------------------------
+    // DELETE DATABASE RECORD
+    // --------------------------------------------------------
 
-    const { error } =
+    const {
+        error
+    } =
         await sb
             .from("notes")
             .delete()
-            .eq("id", noteID);
+            .eq(
+                "id",
+                noteID
+            );
+
 
     if (error) {
 
-        alert(error.message);
+        alert(
+            "Could not delete the note:\n\n" +
+            error.message
+        );
 
         return;
+
     }
 
 
-    // Delete actual file
+    // --------------------------------------------------------
+    // DELETE ACTUAL FILE
+    // --------------------------------------------------------
 
     if (filePath) {
 
-        await sb.storage
-            .from("notes")
-            .remove([filePath]);
+        const {
+            error: storageError
+        } =
+            await sb.storage
+                .from("notes")
+                .remove([
+                    filePath
+                ]);
+
+
+        if (storageError) {
+
+            console.error(
+                "Storage deletion error:",
+                storageError
+            );
+
+        }
 
     }
 
 
-    loadAdminNotes();
+    // Refresh editor list
+
+    await loadAdminNotes();
+
 }
 
 
 // ============================================================
-// INITIALISE WEBSITE
+// INITIALISE EVERYTHING
 // ============================================================
 
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        // Login page
+
+        // ----------------------------------------------------
+        // LOGIN PAGE
+        // ----------------------------------------------------
 
         if ($("#loginForm")) {
 
@@ -1023,7 +1562,9 @@ document.addEventListener(
         }
 
 
-        // Signup page
+        // ----------------------------------------------------
+        // SIGNUP PAGE
+        // ----------------------------------------------------
 
         if ($("#signupForm")) {
 
@@ -1036,7 +1577,9 @@ document.addEventListener(
         }
 
 
-        // Logout
+        // ----------------------------------------------------
+        // LOGOUT
+        // ----------------------------------------------------
 
         if ($("#logout")) {
 
@@ -1049,7 +1592,9 @@ document.addEventListener(
         }
 
 
-        // Editor upload
+        // ----------------------------------------------------
+        // EDITOR UPLOAD
+        // ----------------------------------------------------
 
         if ($("#uploadForm")) {
 
@@ -1062,7 +1607,9 @@ document.addEventListener(
         }
 
 
-        // Homepage subject system
+        // ----------------------------------------------------
+        // SUBJECTS
+        // ----------------------------------------------------
 
         if ($("#subjectGrid")) {
 
@@ -1071,7 +1618,9 @@ document.addEventListener(
         }
 
 
-        // Subject search
+        // ----------------------------------------------------
+        // SUBJECT SEARCH
+        // ----------------------------------------------------
 
         if ($("#subjectSearch")) {
 
@@ -1084,7 +1633,9 @@ document.addEventListener(
         }
 
 
-        // Back button
+        // ----------------------------------------------------
+        // BACK TO SUBJECTS
+        // ----------------------------------------------------
 
         if ($("#backToSubjects")) {
 
@@ -1097,12 +1648,15 @@ document.addEventListener(
         }
 
 
-        // Editor dashboard
+        // ----------------------------------------------------
+        // EDITOR DASHBOARD
+        // ----------------------------------------------------
 
         if ($("#dashboard")) {
 
             const profile =
                 await protectDashboard();
+
 
             if (profile) {
 
