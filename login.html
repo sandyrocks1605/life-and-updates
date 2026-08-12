@@ -1,1 +1,599 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login — Life And Updates</title><link rel="stylesheet" href="styles.css"></head><body><nav><div class="brand"><div class="logo">L</div>Life And Updates</div><div class="navlinks"><a href="index.html">Home</a></div></nav><main class="container"><div class="form-card"><h2>🔐 Login</h2><p class="muted">Students can view notes. Authorised editors can manage them.</p><div id="msg" class="notice hidden"></div><form id="loginForm"><label>Email</label><input id="email" type="email" required><label>Password</label><input id="password" type="password" required><div class="actions"><button class="btn primary">Login</button><a class="btn ghost" href="signup.html">Create account</a></div></form></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Editor Login — Life And Updates</title>
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           LOGIN PAGE
+        ===================================================== */
+
+        .login-page {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 30px 20px;
+
+        }
+
+
+        .login-card {
+
+            width: 100%;
+
+            max-width: 460px;
+
+            padding: 40px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 15px 45px
+                rgba(0, 0, 0, 0.15);
+
+            text-align: center;
+
+        }
+
+
+        .login-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .login-card h1 {
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .editor-notice {
+
+            background: #fff4b8;
+
+            border: 2px solid #111;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            margin: 25px 0;
+
+            text-align: left;
+
+        }
+
+
+        .editor-notice strong {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .login-form {
+
+            text-align: left;
+
+        }
+
+
+        .login-form label {
+
+            display: block;
+
+            margin-top: 15px;
+
+            margin-bottom: 7px;
+
+            font-weight: 700;
+
+        }
+
+
+        .login-form input {
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 13px;
+
+            border: 2px solid #ddd;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+        }
+
+
+        .login-form input:focus {
+
+            outline: none;
+
+            border-color: #111;
+
+        }
+
+
+        .login-button {
+
+            width: 100%;
+
+            margin-top: 25px;
+
+            cursor: pointer;
+
+        }
+
+
+        .student-section {
+
+            margin-top: 30px;
+
+            padding-top: 25px;
+
+            border-top: 2px solid #eee;
+
+        }
+
+
+        .student-section p {
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .website-button {
+
+            display: block;
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            text-align: center;
+
+        }
+
+
+        #loginMessage {
+
+            margin-top: 15px;
+
+            font-weight: 600;
+
+        }
+
+
+        .back-home {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            color: #111;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+        }
+
+
+        .back-home:hover {
+
+            text-decoration: underline;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<nav>
+
+    <div class="brand">
+
+        <div class="logo">
+            L
+        </div>
+
+        <span>
+            Life And Updates
+        </span>
+
+    </div>
+
+
+    <div class="navlinks">
+
+        <a href="index.html">
+            🏠 Home
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+
+<main class="login-page">
+
+
+    <div class="login-card">
+
+
+        <div class="login-icon">
+            🔐
+        </div>
+
+
+        <h1>
+            Editor Login
+        </h1>
+
+
+        <p class="muted">
+
+            Life And Updates
+
+        </p>
+
+
+
+        <!-- =================================================
+             EDITOR NOTICE
+        ================================================== -->
+
+        <div class="editor-notice">
+
+            <strong>
+                ⚠️ Editors Only
+            </strong>
+
+            This login is for authorized
+            Life And Updates editors only.
+
+            Students do not need to log in
+            to use the website and view notes.
+
+        </div>
+
+
+
+        <!-- =================================================
+             LOGIN FORM
+        ================================================== -->
+
+        <form
+            id="loginForm"
+            class="login-form"
+        >
+
+
+            <label for="email">
+
+                Email
+
+            </label>
+
+
+            <input
+                id="email"
+                type="email"
+                placeholder="Editor email"
+                autocomplete="email"
+                required
+            >
+
+
+
+            <label for="password">
+
+                Password
+
+            </label>
+
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Password"
+                autocomplete="current-password"
+                required
+            >
+
+
+
+            <button
+                type="submit"
+                class="btn primary login-button"
+            >
+
+                🔐 Login as Editor
+
+            </button>
+
+
+        </form>
+
+
+
+        <!-- LOGIN MESSAGE -->
+
+        <div
+            id="loginMessage"
+            aria-live="polite"
+        ></div>
+
+
+
+        <!-- =================================================
+             STUDENT SECTION
+        ================================================== -->
+
+        <div class="student-section">
+
+
+            <h2>
+
+                📚 Are you a student?
+
+            </h2>
+
+
+            <p class="muted">
+
+                You don't need an account to use
+                Life And Updates.
+
+                Simply continue to the website
+                to view your school notes and updates.
+
+            </p>
+
+
+            <a
+                href="index.html"
+                class="btn dark website-button"
+            >
+
+                📚 Continue to Website
+
+            </a>
+
+
+        </div>
+
+
+
+        <a
+            href="index.html"
+            class="back-home"
+        >
+
+            ← Back to Home
+
+        </a>
+
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<script src="config.js"></script>
+
+
+
+<!-- =========================================================
+     LOGIN JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const loginMessage =
+        document.getElementById("loginMessage");
+
+
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const email =
+                document.getElementById("email")
+                .value
+                .trim();
+
+
+            const password =
+                document.getElementById("password")
+                .value;
+
+
+            loginMessage.textContent =
+                "Logging in...";
+
+
+            loginMessage.style.color =
+                "#111";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } = await supabase.auth.signInWithPassword({
+
+                    email: email,
+
+                    password: password
+
+                });
+
+
+                if (error) {
+
+                    throw error;
+
+                }
+
+
+                if (!data.user) {
+
+                    throw new Error(
+                        "Login failed."
+                    );
+
+                }
+
+
+                /*
+                 * Check whether this account is actually
+                 * an Editor before allowing dashboard access.
+                 */
+
+                const {
+                    data: profile,
+                    error: profileError
+                } = await supabase
+
+                    .from("profiles")
+
+                    .select("role")
+
+                    .eq("id", data.user.id)
+
+                    .single();
+
+
+                if (profileError) {
+
+                    await supabase.auth.signOut();
+
+                    throw new Error(
+                        "Could not verify your editor access."
+                    );
+
+                }
+
+
+                if (
+                    !profile ||
+                    profile.role !== "editor"
+                ) {
+
+                    await supabase.auth.signOut();
+
+                    loginMessage.textContent =
+                        "This account is not authorized as an Editor.";
+
+                    loginMessage.style.color =
+                        "#b00020";
+
+                    return;
+
+                }
+
+
+                loginMessage.textContent =
+                    "Login successful! Opening Editor Dashboard...";
+
+                loginMessage.style.color =
+                    "green";
+
+
+                setTimeout(function() {
+
+                    window.location.href =
+                        "dashboard.html";
+
+                }, 700);
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                loginMessage.textContent =
+                    error.message ||
+                    "Unable to log in. Please check your details.";
+
+                loginMessage.style.color =
+                    "#b00020";
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
